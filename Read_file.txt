@@ -1,0 +1,120 @@
+import apache_beam as beam
+import json
+
+#config_Dictionary
+read_config_json = {
+    'file_pattern':'/content/Input/test1.json',
+    'min_bundle_size':0,
+    'compression_type':'auto',
+    'strip_trailing_newlines':True,
+	  'validate':True,
+    'skip_header_lines':0
+}
+read_config_txt = {
+    'file_pattern':'/content/Input/2017.txt',
+    'min_bundle_size':0,
+    'compression_type':'auto',
+    'strip_trailing_newlines':True,
+	  'validate':True,
+    'skip_header_lines':0
+}
+read_config_csv = {
+    'file_pattern':'/content/Input/students_adaptability_level_online_education.csv',
+    'min_bundle_size':0,
+    'compression_type':'auto',
+    'strip_trailing_newlines':True,
+	  'validate':True,
+    'skip_header_lines':0
+}
+read_config_parquet = {
+    'file_pattern':'/content/Input/example_test.parquet',
+    'min_bundle_size':0,
+    'validate':True,
+    'columns':None
+}
+read_config_avro = {
+    'file_pattern':'/content/Input/twitter.avro',
+    'min_bundle_size':0,
+    'validate':True
+}
+
+write_config_json = {
+    'filepath+filename':'/content/writeoutput/final_output',
+    'filesuffix':'.json',
+    'shard':0,
+    'shardtype':'',
+    'header':None
+}
+write_config_txt = {
+    'filepath+filename':'/content/writeoutput/final_output',
+    'filesuffix':'.txt',
+    'shard':0,
+    'shardtype':'',
+    'header':None
+}
+write_config_csv = {
+    'filepath+filename':'/content/writeoutput/final_output',
+    'filesuffix':'.csv',
+    'shard':0,
+    'shardtype':'',
+    'header':None
+}
+write_config_parquet = {
+    'filepath+filename':'/content/writeoutput/final_output',
+    'filesuffix':'.parquet',
+    'shard':0,
+    'shardtype':'',
+    'header':None
+}
+write_config_avro = {
+    'filepath+filename':'/content/writeoutput/final_output',
+    'filesuffix':'.avro',
+    'shard':0,
+    'shardtype':'',
+    'header':None
+}
+
+
+
+
+p=beam.Pipeline()
+
+#read functions
+def read_json():
+        final = ( p
+                        |beam.io.ReadFromText(read_config_json['file_pattern'],min_bundle_size=read_config_json['min_bundle_size'],compression_type=read_config_json['compression_type'],strip_trailing_newlines=read_config_json['strip_trailing_newlines'],validate=read_config_json['validate'],skip_header_lines=read_config_json['skip_header_lines'])
+                        |beam.io.WriteToText(write_config_json['filepath+filename'],file_name_suffix=write_config_json['filesuffix'])
+                      ) 
+        return final
+def read_txt():
+        final = ( p
+                        |beam.io.ReadFromText(read_config_txt['file_pattern'],min_bundle_size=read_config_txt['min_bundle_size'],compression_type=read_config_txt['compression_type'],strip_trailing_newlines=read_config_txt['strip_trailing_newlines'],validate=read_config_txt['validate'],skip_header_lines=read_config_txt['skip_header_lines'])
+                        |beam.io.WriteToText(write_config_txt['filepath+filename'],file_name_suffix=write_config_txt['filesuffix'])
+                      ) 
+        return final  
+def read_csv():
+        final = ( p
+                        |beam.io.ReadFromText(read_config_csv['file_pattern'],min_bundle_size=read_config_csv['min_bundle_size'],compression_type=read_config_csv['compression_type'],strip_trailing_newlines=read_config_csv['strip_trailing_newlines'],validate=read_config_csv['validate'],skip_header_lines=read_config_csv['skip_header_lines'])
+                        |beam.io.WriteToText(write_config_csv['filepath+filename'],file_name_suffix=write_config_csv['filesuffix'])
+                      ) 
+        return final     
+def read_parquet():
+        final = ( p
+                        |beam.io.ReadFromParquet(read_config_parquet['file_pattern'],min_bundle_size=read_config_parquet['min_bundle_size'],validate=read_config_parquet['validate'],columns=read_config_parquet['columns'])
+                        |beam.io.WriteToText(write_config_parquet['filepath+filename'],file_name_suffix=write_config_parquet['filesuffix'])
+                      ) 
+        return final   
+def read_avro():
+        final = ( p
+                        |beam.io.ReadFromAvro(read_config_avro['file_pattern'],min_bundle_size=read_config_avro['min_bundle_size'],validate=read_config_avro['validate'])
+                        |beam.io.WriteToText(write_config_avro['filepath+filename'],file_name_suffix=write_config_avro['filesuffix'])
+                      ) 
+        return final  
+#calling Part
+
+ f = read_json()
+# f1 = read_txt()
+# f2 = read_csv()
+#f3 = read_parquet()
+# f4 = read_avro()
+p.run()
